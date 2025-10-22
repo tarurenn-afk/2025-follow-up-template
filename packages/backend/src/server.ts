@@ -1,6 +1,6 @@
 import Fastify from 'fastify'
 import { fastifyCors } from '@fastify/cors'
-import { sampleController } from '@/controller/sampleController'
+import { sampleController } from '@/controller/backController'
 
 const fastify = Fastify({
   logger: true

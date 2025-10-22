@@ -1,6 +1,6 @@
 'use client'
 
-import { Table, Title, Container } from '@mantine/core'
+import { Table, Title, Container, Button } from '@mantine/core'
 import { useSample } from '@/app/hooks/use'
 
 export default function Page() {
@@ -14,14 +14,17 @@ export default function Page() {
       <Title order={2} mb='md'>
         User List
       </Title>
-
       <Table striped highlightOnHover withTableBorder>
         <Table.Thead>
+          <Button variant='green-fill'>追加</Button>
+        </Table.Thead>
+        <Table.Thead>
           <Table.Tr>
-            <Table.Th>ID</Table.Th>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>eMail</Table.Th>
-            <Table.Th>Created At</Table.Th>
+            <Table.Th>番号</Table.Th>
+            <Table.Th>タイトル</Table.Th>
+            <Table.Th>内容</Table.Th>
+            <Table.Th>作成日</Table.Th>
+            <Table.Th>更新日</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -31,6 +34,11 @@ export default function Page() {
               <Table.Td>{user.name}</Table.Td>
               <Table.Td>{user.eMail}</Table.Td>
               <Table.Td>{new Date(user.createdAt).toDateString()}</Table.Td>
+              <Table.Td>{new Date(user.createdAt).toDateString()}</Table.Td>
+              <Table.Td>
+                <Button>更新</Button>
+                <Button>削除</Button>
+              </Table.Td>
             </Table.Tr>
           ))}
         </Table.Tbody>

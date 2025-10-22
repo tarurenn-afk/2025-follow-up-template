@@ -3,8 +3,8 @@ import Link from 'next/link'
 export default function Page() {
   return (
     <>
-      <h1>Hello, Next.js!</h1>
-      <Link href='/sample'>Sample画面へ</Link>
+      <h1>ToDo</h1>
+      <Link href='/todo'>リスト作成へ</Link>
     </>
   )
 }
