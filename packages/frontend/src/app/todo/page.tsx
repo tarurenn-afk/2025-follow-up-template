@@ -1,23 +1,43 @@
 'use client'
 
 import { Table, Title, Container, Button } from '@mantine/core'
-import { useSample } from '@/app/hooks/use'
+import { useHooks } from '@/app/hooks/useHooks'
+import { deleteSQL } from '@/app/todoSQL/deleteSQL'
+import Link from 'next/link'
 
+function formatDateTime(dateString: string) {
+  // ゼロパディング（例: 5 -> 05）を行うヘルパー関数
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1 // getMonth() は 0 から始まるため +1
+  const day = date.getDate()
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const seconds = date.getSeconds()
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
 export default function Page() {
-  const { users, error, isLoading } = useSample()
-
+  const { users, error, isLoading } = useHooks()
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error fetching users: {error.message}</div>
 
+  const handleDelete = async (id: number) => {
+    const ok = confirm(`Id.${id} のTodoリストを削除しますか？`)
+    if (!ok) return
+
+    await deleteSQL(id)
+    window.location.reload()
+  }
   return (
     <Container size='md' mt='xl'>
       <Title order={2} mb='md'>
-        User List
+        ToDoリスト
       </Title>
+      <Link href='/add'>
+        <Button variant='filled'>追加</Button>
+      </Link>
       <Table striped highlightOnHover withTableBorder>
-        <Table.Thead>
-          <Button variant='green-fill'>追加</Button>
-        </Table.Thead>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>番号</Table.Th>
@@ -31,13 +51,19 @@ export default function Page() {
           {users?.map((user) => (
             <Table.Tr key={user.id}>
               <Table.Td>{user.id}</Table.Td>
-              <Table.Td>{user.name}</Table.Td>
-              <Table.Td>{user.eMail}</Table.Td>
-              <Table.Td>{new Date(user.createdAt).toDateString()}</Table.Td>
-              <Table.Td>{new Date(user.createdAt).toDateString()}</Table.Td>
+              <Table.Td>{user.title}</Table.Td>
+              <Table.Td>{user.content}</Table.Td>
+              <Table.Td>{formatDateTime(user.createdAt)}</Table.Td>
+              <Table.Td>{formatDateTime(user.updatedAt)}</Table.Td>
               <Table.Td>
-                <Button>更新</Button>
-                <Button>削除</Button>
+                <Link href={`/edit?id=${user.id}`}>
+                  <Button variant='filled'>編集</Button>
+                </Link>
+              </Table.Td>
+              <Table.Td>
+                <Button variant='filled' onClick={() => handleDelete(user.id)}>
+                  削除
+                </Button>
               </Table.Td>
             </Table.Tr>
           ))}
