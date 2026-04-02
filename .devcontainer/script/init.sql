@@ -1,5 +1,5 @@
 -- サンプルテーブル
-CREATE TABLE users (
+CREATE TABLE todos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(20) NOT NULL,
   content VARCHAR(200) NOT NULL,
