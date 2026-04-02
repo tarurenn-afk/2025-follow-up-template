@@ -1,6 +1,6 @@
 export async function deleteSQL(id: number) {
   try {
-    const res = await fetch(`http://localhost:8000/users/${id}`, {
+    const res = await fetch(`http://localhost:8000/todos/${id}`, {
       method: 'DELETE'
     })
 
