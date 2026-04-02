@@ -13,11 +13,11 @@ import { useState, useEffect } from 'react' //状態確認
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { updateSQL } from '@/app/todoSQL/updateSQL'
-import type { User, editUser } from '@shared/types'
+import type { Todo, EditTodo } from '@shared/types'
 
 export default function Page() {
-  const [title, setTitle] = useState<editUser['title']>('')
-  const [content, setContent] = useState<editUser['content']>('')
+  const [title, setTitle] = useState<EditTodo['title']>('')
+  const [content, setContent] = useState<EditTodo['content']>('')
   const searchParams = useSearchParams()
   const rawId = searchParams.get('id')
   const id = rawId ? Number(rawId) : null
@@ -27,11 +27,13 @@ export default function Page() {
     if (!id || isNaN(id)) return
     const fetchTodo = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/users/${id}`)
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`
+        )
         if (!res.ok) throw new Error('Failed to fetch todo')
-        const users: User = await res.json()
-        setTitle(users.title)
-        setContent(users.content)
+        const todos: Todo = await res.json()
+        setTitle(todos.title)
+        setContent(todos.content)
       } catch (error) {
         console.error(error)
       }
@@ -44,7 +46,7 @@ export default function Page() {
       alert('タイトルを入力してください。')
       return
     }
-    const check: editUser = {
+    const check: EditTodo = {
       id,
       title,
       content

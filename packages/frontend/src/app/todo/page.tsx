@@ -1,12 +1,11 @@
 'use client'
 
 import { Table, Title, Container, Button } from '@mantine/core'
-import { useHooks } from '@/app/hooks/useHooks'
+import { useTodo } from '@/app/hooks/useTodo'
 import { deleteSQL } from '@/app/todoSQL/deleteSQL'
 import Link from 'next/link'
 
 function formatDateTime(dateString: string) {
-  // ゼロパディング（例: 5 -> 05）を行うヘルパー関数
   const date = new Date(dateString)
   const year = date.getFullYear()
   const month = date.getMonth() + 1 // getMonth() は 0 から始まるため +1
@@ -18,7 +17,7 @@ function formatDateTime(dateString: string) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 }
 export default function Page() {
-  const { users, error, isLoading } = useHooks()
+  const { todos, error, isLoading } = useTodo()
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error fetching users: {error.message}</div>
 
@@ -48,20 +47,20 @@ export default function Page() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {users?.map((user) => (
-            <Table.Tr key={user.id}>
-              <Table.Td>{user.id}</Table.Td>
-              <Table.Td>{user.title}</Table.Td>
-              <Table.Td>{user.content}</Table.Td>
-              <Table.Td>{formatDateTime(user.createdAt)}</Table.Td>
-              <Table.Td>{formatDateTime(user.updatedAt)}</Table.Td>
+          {todos?.map((todo) => (
+            <Table.Tr key={todo.id}>
+              <Table.Td>{todo.id}</Table.Td>
+              <Table.Td>{todo.title}</Table.Td>
+              <Table.Td>{todo.content}</Table.Td>
+              <Table.Td>{formatDateTime(todo.createdAt)}</Table.Td>
+              <Table.Td>{formatDateTime(todo.updatedAt)}</Table.Td>
               <Table.Td>
-                <Link href={`/edit?id=${user.id}`}>
+                <Link href={`/edit?id=${todo.id}`}>
                   <Button variant='filled'>編集</Button>
                 </Link>
               </Table.Td>
               <Table.Td>
-                <Button variant='filled' onClick={() => handleDelete(user.id)}>
+                <Button variant='filled' onClick={() => handleDelete(todo.id)}>
                   削除
                 </Button>
               </Table.Td>

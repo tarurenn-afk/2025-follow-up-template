@@ -12,11 +12,11 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { writeSQL } from '@/app/todoSQL/writeSQL'
-import type { addUser } from '@shared/types'
+import type { AddTodo } from '@shared/types'
 
 export default function Page() {
-  const [title, setTitle] = useState<addUser['title']>('')
-  const [content, setContent] = useState<addUser['content']>('')
+  const [title, setTitle] = useState<AddTodo['title']>('')
+  const [content, setContent] = useState<AddTodo['content']>('')
   const router = useRouter()
 
   const handleSubmit = async () => {
@@ -25,13 +25,12 @@ export default function Page() {
       return
     }
 
-    const check: addUser = {
+    const check: AddTodo = {
       title,
       content
     }
 
     try {
-      // console.log(value)
       await writeSQL(check)
       router.push('/todo')
     } catch {
