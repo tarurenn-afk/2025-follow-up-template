@@ -1,4 +1,4 @@
-export type editUser = {
+export type EditTodo = {
   id: number
   title: string
   content: string
