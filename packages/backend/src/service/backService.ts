@@ -1,11 +1,11 @@
 import { pool } from '@/db'
 import type { RowDataPacket, ResultSetHeader } from 'mysql2'
-import type { addUser, editUser } from '@/types'
+import type { AddTodo, EditTodo } from '@/types'
 
 export const getAllTodos = async () => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT id, title, content, created_at, updated_at FROM users ORDER BY id ASC'
+      'SELECT id, title, content, created_at, updated_at FROM todos ORDER BY id ASC'
     )
     return rows.map((row) => ({
       id: row.id,
@@ -23,7 +23,7 @@ export const getAllTodos = async () => {
 export const getTodoNo = async (id: number) => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT id, title, content, created_at, updated_at FROM users WHERE id = ?',
+      'SELECT id, title, content, created_at, updated_at FROM todos WHERE id = ?',
       [id]
     )
 
@@ -43,11 +43,11 @@ export const getTodoNo = async (id: number) => {
   }
 }
 
-export const addTodo = async (data: addUser) => {
+export const addTodo = async (data: AddTodo) => {
   const { title, content } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'INSERT INTO users (title, content, created_at, updated_at) VALUES (?, ?, NOW(), NOW())',
+      'INSERT INTO todos (title, content, created_at, updated_at) VALUES (?, ?, NOW(), NOW())',
       [title, content]
     )
     return result
@@ -57,11 +57,11 @@ export const addTodo = async (data: addUser) => {
   }
 }
 
-export const updateTodo = async (data: editUser) => {
+export const updateTodo = async (data: EditTodo) => {
   const { title, content, id } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'UPDATE users SET title = ?, content = ?, updated_at = NOW() WHERE id = ?',
+      'UPDATE todos SET title = ?, content = ?, updated_at = NOW() WHERE id = ?',
       [title, content, id]
     )
     return result
@@ -74,7 +74,7 @@ export const updateTodo = async (data: editUser) => {
 export const deleteTodo = async (id: number) => {
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'DELETE FROM users WHERE id = ?',
+      'DELETE FROM todos WHERE id = ?',
       [id]
     )
     return result
