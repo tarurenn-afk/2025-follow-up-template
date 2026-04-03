@@ -11,14 +11,14 @@ export function useTodo(): {
     if (!res.ok) {
       const status = res.status
       const body = await res.text()
-      const message = `failed to fetch users. error(status: ${status}, body: ${body})`
+      const message = `failed to fetch todos. error(status: ${status}, body: ${body})`
       throw new Error(message)
     }
     return res.json()
   }
 
   const { data, error, isLoading } = useSWR<Todo[], Error>(
-    'http://localhost:8000/todos',
+    `${process.env.NEXT_PUBLIC_API_URL}/todos`,
     fetcher
   )
 
