@@ -24,7 +24,6 @@ export default function Page() {
   const handleDelete = async (id: number) => {
     const ok = confirm(`Id.${id} のTodoリストを削除しますか？`)
     if (!ok) return
-
     await deleteSQL(id)
     window.location.reload()
   }
@@ -42,6 +41,7 @@ export default function Page() {
             <Table.Th>番号</Table.Th>
             <Table.Th>タイトル</Table.Th>
             <Table.Th>内容</Table.Th>
+            <Table.Th>期限日</Table.Th>
             <Table.Th>作成日</Table.Th>
             <Table.Th>更新日</Table.Th>
           </Table.Tr>
