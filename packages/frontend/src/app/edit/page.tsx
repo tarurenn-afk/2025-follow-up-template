@@ -27,9 +27,7 @@ export default function Page() {
     if (!id || isNaN(id)) return
     const fetchTodo = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`
-        )
+        const res = await fetch(`${process.env.NEW_PUBLIC_API_URL}/todos/${id}`)
         if (!res.ok) throw new Error('Failed to fetch todo')
         const todos: Todo = await res.json()
         setTitle(todos.title)
@@ -52,7 +50,6 @@ export default function Page() {
       content
     }
     try {
-      // console.log(value)
       await updateSQL(check)
       router.push('/todo')
     } catch {
@@ -67,30 +64,35 @@ export default function Page() {
       </Title>
 
       <Stack gap='md'>
-        <TextInput
-          label='タイトル'
-          placeholder='テキストを入力'
-          value={title}
-          maxLength={20}
-          onChange={(event) => setTitle(event.currentTarget.value)}
-        />
-        <TextInput
-          label='内容'
-          placeholder='テキストを入力'
-          value={content}
-          maxLength={200}
-          onChange={(event) => setContent(event.currentTarget.value)}
-        />
+        <form>
+          <TextInput
+            label='タイトル'
+            description='20文字以内で書いてください'
+            placeholder='テキストを入力'
+            value={title}
+            maxLength={20}
+            onChange={(event) => setTitle(event.currentTarget.value)}
+          />
+          <hr />
+          <TextInput
+            label='内容'
+            description='200文字以内で書いてください'
+            placeholder='テキストを入力'
+            value={content}
+            maxLength={200}
+            onChange={(event) => setContent(event.currentTarget.value)}
+          />
+          <hr />
+          <Group gap='sm'>
+            <Button variant='filled' onClick={handleSubmit}>
+              更新
+            </Button>
 
-        <Group gap='sm'>
-          <Button variant='filled' onClick={handleSubmit}>
-            更新
-          </Button>
-
-          <Link href='/todo'>
-            <Button variant='filled'>戻る</Button>
-          </Link>
-        </Group>
+            <Link href='/todo'>
+              <Button variant='filled'>戻る</Button>
+            </Link>
+          </Group>
+        </form>
       </Stack>
     </Container>
   )
