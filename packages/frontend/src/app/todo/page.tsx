@@ -3,29 +3,48 @@
 import { Table, Title, Container, Button } from '@mantine/core'
 import { useTodo } from '@/app/hooks/useTodo'
 import { deleteSQL } from '@/app/todoSQL/deleteSQL'
+import { useSWRConfig } from 'swr'
 import Link from 'next/link'
 
 function formatDateTime(dateString: string) {
-  const date = new Date(dateString)
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1 // getMonth() は 0 から始まるため +1
-  const day = date.getDate()
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-  const seconds = date.getSeconds()
+  const today = new Date(dateString)
+  const formatted = today
+    .toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    })
+    .split('/')
+    .join('-')
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+  return formatted
+}
+
+function formatDate(dateString: string) {
+  const today = new Date(dateString)
+  const formatted = today
+    .toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    })
+    .split('/')
+    .join('-')
+  return formatted
 }
 export default function Page() {
-  const { todos, error, isLoading } = useTodo()
+  const { todos, error, isLoading, mutate } = useTodo()
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error fetching users: {error.message}</div>
 
   const handleDelete = async (id: number) => {
-    const ok = confirm(`Id.${id} のTodoリストを削除しますか？`)
+    const ok = confirm(`Id.${id}のTodoリストを削除しますか？`)
     if (!ok) return
     await deleteSQL(id)
-    window.location.reload()
+    mutate()
   }
   return (
     <Container size='md' mt='xl'>
@@ -52,6 +71,7 @@ export default function Page() {
               <Table.Td>{todo.id}</Table.Td>
               <Table.Td>{todo.title}</Table.Td>
               <Table.Td>{todo.content}</Table.Td>
+              <Table.Td>{formatDate(todo.limitedAt)}</Table.Td>
               <Table.Td>{formatDateTime(todo.createdAt)}</Table.Td>
               <Table.Td>{formatDateTime(todo.updatedAt)}</Table.Td>
               <Table.Td>
