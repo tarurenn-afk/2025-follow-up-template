@@ -5,8 +5,8 @@ import {
   Stack,
   Title,
   Container,
-  TextInput,
-  Group
+  Group,
+  TextInput
 } from '@mantine/core'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -17,7 +17,17 @@ import type { AddTodo } from '@shared/types'
 export default function Page() {
   const [title, setTitle] = useState<AddTodo['title']>('')
   const [content, setContent] = useState<AddTodo['content']>('')
+  const [limitedAt, setLimited] = useState<AddTodo['limited']>('')
   const router = useRouter()
+  const today = new Date()
+  const formatted = today
+    .toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    })
+    .split('/')
+    .join('-')
 
   const handleSubmit = async () => {
     if (!title.trim()) {
@@ -27,7 +37,8 @@ export default function Page() {
 
     const check: AddTodo = {
       title,
-      content
+      content,
+      limitedAt
     }
 
     try {
@@ -44,30 +55,44 @@ export default function Page() {
       </Title>
 
       <Stack gap='md'>
-        <TextInput
-          label='タイトル'
-          placeholder='テキストを入力'
-          value={title}
-          maxLength={20}
-          onChange={(event) => setTitle(event.currentTarget.value)}
-        />
-        <TextInput
-          label='内容'
-          placeholder='テキストを入力'
-          value={content}
-          maxLength={200}
-          onChange={(event) => setContent(event.currentTarget.value)}
-        />
-
-        <Group gap='sm'>
-          <Button variant='filled' onClick={handleSubmit}>
-            追加
-          </Button>
-
-          <Link href='/todo'>
-            <Button variant='filled'>戻る</Button>
-          </Link>
-        </Group>
+        <form>
+          <TextInput
+            label='タイトル'
+            description='20文字以内で書いてください'
+            placeholder='テキスト入力'
+            value={title}
+            maxLength={20}
+            onChange={(event) => setTitle(event.currentTarget.value)}
+          />
+          <hr />
+          <TextInput
+            label='内容'
+            description='200文字以内で書いてください'
+            placeholder='テキスト入力'
+            value={content}
+            maxLength={200}
+            onChange={(event) => setContent(event.currentTarget.value)}
+          />
+          <hr />
+          <TextInput
+            label='期限'
+            description='期限の日付を入力してください'
+            placeholder='テキスト入力'
+            type='date'
+            value={limitedAt}
+            min={formatted}
+            onChange={(event) => setLimited(event.currentTarget.value)}
+          />
+          <hr />
+          <Group gap='sm'>
+            <Button variant='filled' onClick={handleSubmit}>
+              追加
+            </Button>
+            <Link href='/todo'>
+              <Button variant='filled'>戻る</Button>
+            </Link>
+          </Group>
+        </form>
       </Stack>
     </Container>
   )
