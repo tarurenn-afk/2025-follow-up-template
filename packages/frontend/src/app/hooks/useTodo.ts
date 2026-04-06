@@ -1,10 +1,11 @@
-import useSWR from 'swr'
+import useSWR, { type KeyedMutator } from 'swr'
 import type { Todo } from '@shared/types'
 
 export function useTodo(): {
   todos: Todo[]
   error: Error | undefined
   isLoading: boolean
+  mutate: KeyedMutator<Todo[]>
 } {
   const fetcher = async (url: string): Promise<Todo[]> => {
     const res = await fetch(url)
@@ -17,10 +18,10 @@ export function useTodo(): {
     return res.json()
   }
 
-  const { data, error, isLoading } = useSWR<Todo[], Error>(
+  const { data, error, isLoading, mutate } = useSWR<Todo[], Error>(
     `${process.env.NEXT_PUBLIC_API_URL}/todos`,
     fetcher
   )
 
-  return { todos: data || [], error, isLoading }
+  return { todos: data || [], error, isLoading, mutate }
 }
