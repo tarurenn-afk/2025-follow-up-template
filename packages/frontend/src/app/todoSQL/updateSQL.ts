@@ -11,7 +11,8 @@ export async function updateSQL(data: EditTodo) {
         },
         body: JSON.stringify({
           title: data.title,
-          content: data.content
+          content: data.content,
+          limitedAt: data.limitedAt
         })
       }
     )
