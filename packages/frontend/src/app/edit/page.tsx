@@ -18,13 +18,23 @@ import type { Todo, EditTodo } from '@shared/types'
 export default function Page() {
   const [title, setTitle] = useState<EditTodo['title']>('')
   const [content, setContent] = useState<EditTodo['content']>('')
+  const [limitedAt, setLimited] = useState<EditTodo['LimitedAt']>('')
   const searchParams = useSearchParams()
   const rawId = searchParams.get('id')
   const id = rawId ? Number(rawId) : null
   const router = useRouter()
+  const today = new Date()
+  const formatted = today
+    .toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    })
+    .split('/')
+    .join('-')
 
   useEffect(() => {
-    if (!id || isNaN(id)) return
+    if (!id) return
     const fetchTodo = async () => {
       try {
         const res = await fetch(`${process.env.NEW_PUBLIC_API_URL}/todos/${id}`)
@@ -32,6 +42,7 @@ export default function Page() {
         const todos: Todo = await res.json()
         setTitle(todos.title)
         setContent(todos.content)
+        setLimited(todos.limitedAt)
       } catch (error) {
         console.error(error)
       }
@@ -47,7 +58,8 @@ export default function Page() {
     const check: EditTodo = {
       id,
       title,
-      content
+      content,
+      limitedAt
     }
     try {
       await updateSQL(check)
@@ -81,6 +93,16 @@ export default function Page() {
             value={content}
             maxLength={200}
             onChange={(event) => setContent(event.currentTarget.value)}
+          />
+          <hr />
+          <TextInput
+            label='期限'
+            description='期限の日付を入力してください'
+            placeholder='テキスト入力'
+            type='date'
+            value={limitedAt}
+            min={formatted}
+            onChange={(event) => setLimited(event.currentTarget.value)}
           />
           <hr />
           <Group gap='sm'>
