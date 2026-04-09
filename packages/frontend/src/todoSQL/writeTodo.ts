@@ -1,12 +1,6 @@
-<<<<<<<< HEAD:packages/frontend/src/todoSQL/additionTodo.ts
 import type { AddTodoRequest } from '@/shared/types'
 
 export async function additionTodo(data: AddTodoRequest) {
-========
-import type { AddTodo } from '@/shared/types'
-
-export async function writeTodo(data: AddTodo) {
->>>>>>>> dd75a21 (ログイン機能追加):packages/frontend/src/todoSQL/writeTodo.ts
   try {
     const write = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/todos`, {
       method: 'POST',

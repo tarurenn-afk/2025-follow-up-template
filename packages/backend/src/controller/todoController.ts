@@ -27,7 +27,7 @@ export const todoController: FastifyPluginAsync = async (
     reply.status(200).send(todos)
   })
 
-  // 登録（POST）
+  //　登録（POST）
   fastify.post<{ Body: AddTodoRequest }>('/todos', async (request, reply) => {
     try {
       const body = request.body
