@@ -2,7 +2,7 @@ import type { FastifyPluginAsync, FastifyInstance } from 'fastify'
 import type { AddTodo, EditTodo } from '@/types'
 import {
   getAllTodos,
-  getTodoId,
+  getTodoById,
   addTodo,
   updateTodo,
   deleteTodo
@@ -29,13 +29,13 @@ export const todoController: FastifyPluginAsync = async (
     }
   })
 
-  //一件取得(GET)
+  // 一件取得(GET)
   fastify.get<{ Params: { id: number } }>(
     '/todos/id',
     async (request, reply) => {
       try {
         const id = request.params.id
-        const todo = await getTodoId(id)
+        const todo = await getTodoById(id)
         if (!todo) return reply.status(404).send({ message: 'Todo not found' })
         reply.status(200).send(todo)
       } catch (error) {
@@ -44,7 +44,7 @@ export const todoController: FastifyPluginAsync = async (
       }
     }
   )
-  //置き換え(PUT)
+  // 置き換え(PUT)
   fastify.put<{
     Params: { id: number }
     Body: Omit<EditTodo, 'id'>
@@ -65,20 +65,23 @@ export const todoController: FastifyPluginAsync = async (
       reply.status(500).send({ message: 'Failed to update todo' })
     }
   })
-  //削除(DELETE)
-  fastify.delete('/todos/:id', async (request, reply) => {
-    try {
-      const { id } = request.params as { id: number }
-      const result = await deleteTodo(id)
+  // 削除(DELETE)
+  fastify.delete<{ Params: { id: number } }>(
+    '/todos/:id',
+    async (request, reply) => {
+      try {
+        const id = request.params.id
+        const result = await deleteTodo(id)
 
-      if (result.affectedRows === 0) {
-        return reply.status(404).send({ message: 'Todo not found' })
+        if (result.affectedRows === 0) {
+          return reply.status(404).send({ message: 'Todo not found' })
+        }
+
+        reply.status(200).send({ message: 'Todo deleted' })
+      } catch (error) {
+        console.error('DELETE /todos/:id error:', error)
+        reply.status(500).send({ message: 'Failed to delete todo' })
       }
-
-      reply.status(200).send({ message: 'Todo deleted' })
-    } catch (error) {
-      console.error('DELETE /todos/:id error:', error)
-      reply.status(500).send({ message: 'Failed to delete todo' })
     }
-  })
+  )
 }
