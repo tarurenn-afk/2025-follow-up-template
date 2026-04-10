@@ -12,16 +12,16 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react' //状態確認
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import { updateSQL } from '@/app/todoSQL/updateSQL'
-import type { Todo, EditTodo } from '@shared/types'
+import { updateTodo } from '@/app/todoSQL/updateTodo'
+import type { Todo, EditTodo } from '@/shared/types'
 
 export default function Page() {
   const [title, setTitle] = useState<EditTodo['title']>('')
   const [content, setContent] = useState<EditTodo['content']>('')
-  const [limitedAt, setLimited] = useState<EditTodo['LimitedAt']>('')
+  const [limitedAt, setLimited] = useState<EditTodo['limitedAt']>('')
   const searchParams = useSearchParams()
   const rawId = searchParams.get('id')
-  const id = rawId ? Number(rawId) : null
+  const id = Number(rawId)
   const router = useRouter()
   const today = new Date()
   const formatted = today
@@ -37,7 +37,9 @@ export default function Page() {
     if (!id) return
     const fetchTodo = async () => {
       try {
-        const res = await fetch(`${process.env.NEW_PUBLIC_API_URL}/todos/${id}`)
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`
+        )
         if (!res.ok) throw new Error('Failed to fetch todo')
         const todos: Todo = await res.json()
         setTitle(todos.title)
@@ -52,7 +54,7 @@ export default function Page() {
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      alert('タイトルを入力してください。')
+      alert('タイトルを入力してください')
       return
     }
     const check: EditTodo = {
@@ -62,7 +64,7 @@ export default function Page() {
       limitedAt
     }
     try {
-      await updateSQL(check)
+      await updateTodo(check)
       router.push('/todo')
     } catch {
       alert('送信失敗')
@@ -76,7 +78,7 @@ export default function Page() {
       </Title>
 
       <Stack gap='md'>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextInput
             label='タイトル'
             description='20文字以内で書いてください'
@@ -106,7 +108,7 @@ export default function Page() {
           />
           <hr />
           <Group gap='sm'>
-            <Button variant='filled' onClick={handleSubmit}>
+            <Button variant='filled' type='submit'>
               更新
             </Button>
 

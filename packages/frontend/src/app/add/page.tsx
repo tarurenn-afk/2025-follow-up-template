@@ -55,7 +55,7 @@ export default function Page() {
       </Title>
 
       <Stack gap='md'>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextInput
             label='タイトル'
             description='20文字以内で書いてください'
@@ -85,7 +85,7 @@ export default function Page() {
           />
           <hr />
           <Group gap='sm'>
-            <Button variant='filled' onClick={handleSubmit}>
+            <Button variant='filled' type='submit'>
               追加
             </Button>
             <Link href='/todo'>
