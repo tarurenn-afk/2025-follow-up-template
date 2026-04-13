@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "rootDir": "../",
     "outDir": "dist",
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -16,7 +17,8 @@
     "allowJs": true,
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*", "../shared/*", "./src/app/*"]
+      "@/*": ["./src/*", "./src/app/*"],
+      "@/shared*": ["../shared/*"]
     }
   },
   "include": [
@@ -24,7 +26,8 @@
     "**/*.tsx",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "../shared"
+    "../shared",
+    "../shared/**/*"
   ],
   "exclude": ["node_modules"]
 }
