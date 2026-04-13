@@ -2,7 +2,7 @@ export type Todo = {
   id: number
   title: string
   content: string
-  timelimit: string
+  limitedDate: string
   createdAt: string
   updatedAt: string
 }

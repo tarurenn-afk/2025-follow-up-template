@@ -44,7 +44,7 @@ export const todoController: FastifyPluginAsync = async (
       }
     }
   )
-  // 置き換え(PUT)
+  // 更新(PUT)
   fastify.put<{
     Params: { id: number }
     Body: Omit<EditTodo, 'id'>
@@ -55,7 +55,7 @@ export const todoController: FastifyPluginAsync = async (
         id,
         title: request.body.title,
         content: request.body.content,
-        limitedAt: request.body.limitedAt
+        limitedDate: request.body.limitedDate
       }
 
       const result = await updateTodo(todo)

@@ -5,13 +5,13 @@ import type { AddTodo, EditTodo } from '@/types'
 export const getAllTodos = async () => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT id, title, content, time_limit,created_at, updated_at FROM todos ORDER BY id ASC'
+      'SELECT id, title, content, limit_date, created_at, updated_at FROM todos ORDER BY id ASC'
     )
     return rows.map((row) => ({
       id: row.id,
       title: row.title,
       content: row.content,
-      limitedAt: row.time_limit,
+      limitedDate: row.limit_date,
       createdAt: row.created_at,
       updatedAt: row.updated_at
     }))
@@ -24,7 +24,7 @@ export const getAllTodos = async () => {
 export const getTodoById = async (id: number) => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT id, title, content, time_limit,created_at, updated_at FROM todos WHERE id = ?',
+      'SELECT id, title, content, limit_date, created_at, updated_at FROM todos WHERE id = ?',
       [id]
     )
 
@@ -35,7 +35,7 @@ export const getTodoById = async (id: number) => {
       id: row.id,
       title: row.title,
       content: row.content,
-      limitedAt: row.time_limit,
+      limitedDate: row.limit_date,
       createdAt: row.created_at,
       updatedAt: row.updated_at
     }
@@ -46,11 +46,11 @@ export const getTodoById = async (id: number) => {
 }
 
 export const addTodo = async (data: AddTodo) => {
-  const { title, content, limitedAt } = data
+  const { title, content, limitedDate } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'INSERT INTO todos (title, content,time_limit, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())',
-      [title, content, limitedAt]
+      'INSERT INTO todos (title, content, limit_date, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())',
+      [title, content, limitedDate]
     )
     return result
   } catch (error) {
@@ -60,11 +60,11 @@ export const addTodo = async (data: AddTodo) => {
 }
 
 export const updateTodo = async (data: EditTodo) => {
-  const { title, content, limitedAt, id } = data
+  const { title, content, limitedDate, id } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'UPDATE todos SET title = ?, content = ?, time_limit=?,updated_at = NOW() WHERE id = ?',
-      [title, content, limitedAt, id]
+      'UPDATE todos SET title = ?, content = ?, limit_date=?, updated_at = NOW() WHERE id = ?',
+      [title, content, limitedDate, id]
     )
     return result
   } catch (error) {
