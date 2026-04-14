@@ -78,10 +78,17 @@ export default function Page() {
                   <Button variant='filled'>編集</Button>
                 </Link>
               </Table.Td>
+
               <Table.Td>
-                <Button variant='filled' onClick={() => handleDelete(todo.id)}>
-                  削除
-                </Button>
+                <form
+                  onSubmit={() => {
+                    handleDelete(todo.id)
+                  }}
+                >
+                  <Button variant='filled' type='submit'>
+                    削除
+                  </Button>
+                </form>
               </Table.Td>
             </Table.Tr>
           ))}
