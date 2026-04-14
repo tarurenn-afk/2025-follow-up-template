@@ -1,4 +1,4 @@
-import type { AddTodo } from '@shared/types'
+import type { AddTodo } from '@/shared/types'
 
 export async function writeTodo(data: AddTodo) {
   try {

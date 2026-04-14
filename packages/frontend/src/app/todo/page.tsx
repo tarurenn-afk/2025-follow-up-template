@@ -1,7 +1,7 @@
 'use client'
 
 import { Table, Title, Container, Button } from '@mantine/core'
-import { useTodo } from '@/app/hooks/useTodo'
+import { useTodos } from '@/app/hooks/useTodos'
 import { deleteTodo } from '@/app/todoSQL/deleteTodo'
 import Link from 'next/link'
 
@@ -35,7 +35,7 @@ function formatDate(dateString: string) {
   return formatted
 }
 export default function Page() {
-  const { todos, error, isLoading, mutate } = useTodo()
+  const { todos, error, isLoading, mutate } = useTodos()
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error fetching users: {error.message}</div>
 

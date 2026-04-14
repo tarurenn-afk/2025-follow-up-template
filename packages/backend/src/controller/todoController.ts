@@ -31,7 +31,7 @@ export const todoController: FastifyPluginAsync = async (
 
   // 一件取得(GET)
   fastify.get<{ Params: { id: number } }>(
-    '/todos/id',
+    '/todos/:id',
     async (request, reply) => {
       try {
         const id = request.params.id

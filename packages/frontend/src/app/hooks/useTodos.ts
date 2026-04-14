@@ -1,7 +1,7 @@
 import useSWR, { type KeyedMutator } from 'swr'
 import type { Todo } from '@/shared/types'
 
-export function useTodo(): {
+export function useTodos(): {
   todos: Todo[]
   error: Error | undefined
   isLoading: boolean
