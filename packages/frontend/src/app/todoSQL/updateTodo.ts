@@ -1,6 +1,6 @@
 import type { EditTodo } from '@shared/types'
 
-export async function updateSQL(data: EditTodo) {
+export async function updateTodo(data: EditTodo) {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/todos/${data.id}`,
@@ -12,7 +12,7 @@ export async function updateSQL(data: EditTodo) {
         body: JSON.stringify({
           title: data.title,
           content: data.content,
-          limitedAt: data.limitedAt
+          limitedDate: data.limitedDate
         })
       }
     )

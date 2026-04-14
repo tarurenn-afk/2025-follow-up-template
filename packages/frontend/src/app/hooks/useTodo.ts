@@ -1,5 +1,5 @@
 import useSWR, { type KeyedMutator } from 'swr'
-import type { Todo } from '@shared/types'
+import type { Todo } from '@/shared/types'
 
 export function useTodo(): {
   todos: Todo[]

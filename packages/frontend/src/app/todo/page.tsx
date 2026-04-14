@@ -2,8 +2,7 @@
 
 import { Table, Title, Container, Button } from '@mantine/core'
 import { useTodo } from '@/app/hooks/useTodo'
-import { deleteSQL } from '@/app/todoSQL/deleteSQL'
-import { useSWRConfig } from 'swr'
+import { deleteTodo } from '@/app/todoSQL/deleteTodo'
 import Link from 'next/link'
 
 function formatDateTime(dateString: string) {
@@ -43,7 +42,7 @@ export default function Page() {
   const handleDelete = async (id: number) => {
     const ok = confirm(`Id.${id}のTodoリストを削除しますか？`)
     if (!ok) return
-    await deleteSQL(id)
+    await deleteTodo(id)
     mutate()
   }
   return (
@@ -71,7 +70,7 @@ export default function Page() {
               <Table.Td>{todo.id}</Table.Td>
               <Table.Td>{todo.title}</Table.Td>
               <Table.Td>{todo.content}</Table.Td>
-              <Table.Td>{formatDate(todo.limitedAt)}</Table.Td>
+              <Table.Td>{formatDate(todo.limitedDate)}</Table.Td>
               <Table.Td>{formatDateTime(todo.createdAt)}</Table.Td>
               <Table.Td>{formatDateTime(todo.updatedAt)}</Table.Td>
               <Table.Td>

@@ -1,4 +1,4 @@
-export async function deleteSQL(id: number) {
+export async function deleteTodo(id: number) {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`, {
       method: 'DELETE'

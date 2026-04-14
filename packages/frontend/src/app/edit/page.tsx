@@ -18,7 +18,7 @@ import type { Todo, EditTodo } from '@/shared/types'
 export default function Page() {
   const [title, setTitle] = useState<EditTodo['title']>('')
   const [content, setContent] = useState<EditTodo['content']>('')
-  const [limitedAt, setLimited] = useState<EditTodo['limitedAt']>('')
+  const [limitedDate, setLimitedDate] = useState<EditTodo['limitedDate']>('')
   const searchParams = useSearchParams()
   const rawId = searchParams.get('id')
   const id = Number(rawId)
@@ -44,7 +44,7 @@ export default function Page() {
         const todos: Todo = await res.json()
         setTitle(todos.title)
         setContent(todos.content)
-        setLimited(todos.limitedAt)
+        setLimitedDate(todos.limitedDate)
       } catch (error) {
         console.error(error)
       }
@@ -61,7 +61,7 @@ export default function Page() {
       id,
       title,
       content,
-      limitedAt
+      limitedDate
     }
     try {
       await updateTodo(check)
@@ -102,9 +102,9 @@ export default function Page() {
             description='期限の日付を入力してください'
             placeholder='テキスト入力'
             type='date'
-            value={limitedAt}
+            value={limitedDate}
             min={formatted}
-            onChange={(event) => setLimited(event.currentTarget.value)}
+            onChange={(event) => setLimitedDate(event.currentTarget.value)}
           />
           <hr />
           <Group gap='sm'>

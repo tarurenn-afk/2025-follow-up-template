@@ -1,6 +1,6 @@
 import type { AddTodo } from '@shared/types'
 
-export async function writeSQL(data: AddTodo) {
+export async function writeTodo(data: AddTodo) {
   try {
     const write = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/todos`, {
       method: 'POST',

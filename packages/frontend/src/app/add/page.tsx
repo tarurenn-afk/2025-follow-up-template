@@ -11,13 +11,13 @@ import {
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { writeSQL } from '@/app/todoSQL/writeSQL'
-import type { AddTodo } from '@shared/types'
+import { writeTodo } from '@/app/todoSQL/writeTodo'
+import type { AddTodo } from '@/shared/types'
 
 export default function Page() {
   const [title, setTitle] = useState<AddTodo['title']>('')
   const [content, setContent] = useState<AddTodo['content']>('')
-  const [limitedAt, setLimited] = useState<AddTodo['limited']>('')
+  const [limitedDate, setLimitedDate] = useState<AddTodo['limitedDate']>('')
   const router = useRouter()
   const today = new Date()
   const formatted = today
@@ -38,11 +38,11 @@ export default function Page() {
     const check: AddTodo = {
       title,
       content,
-      limitedAt
+      limitedDate
     }
 
     try {
-      await writeSQL(check)
+      await writeTodo(check)
       router.push('/todo')
     } catch {
       alert('送信失敗')
@@ -79,9 +79,9 @@ export default function Page() {
             description='期限の日付を入力してください'
             placeholder='テキスト入力'
             type='date'
-            value={limitedAt}
+            value={limitedDate}
             min={formatted}
-            onChange={(event) => setLimited(event.currentTarget.value)}
+            onChange={(event) => setLimitedDate(event.currentTarget.value)}
           />
           <hr />
           <Group gap='sm'>
