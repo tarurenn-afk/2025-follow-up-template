@@ -6,6 +6,7 @@ export async function updateTodo(data: EditTodoRequest) {
       `${process.env.NEXT_PUBLIC_API_URL}/todos/${data.id}`,
       {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
         },

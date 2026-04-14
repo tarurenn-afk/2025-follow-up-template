@@ -32,6 +32,7 @@ export const todoController: FastifyPluginAsync = async (
     try {
       const body = request.body
       const userNo = request.session.get('userNo')
+      request.session.set('userNo', userNo)
       if (!userNo) return reply.status(401).send({ message: 'AUTH ERROR' })
       const result = await addTodo(body, userNo)
       reply.status(201).send({ message: 'Todo added', result })
@@ -70,8 +71,11 @@ export const todoController: FastifyPluginAsync = async (
         priority: request.body.priority,
         limitedDate: request.body.limitedDate
       }
-
-      const result = await updateTodo(todo)
+      const userNo = request.session.get('userNo')
+      request.session.set('userNo', userNo)
+      console.log(userNo)
+      if (!userNo) return reply.status(401).send({ message: 'AUTH ERROR' })
+      const result = await updateTodo(todo, userNo)
       reply.status(200).send({ message: 'Todo updated', result })
     } catch (error) {
       console.error('PUT /todos/:id error:', error)
@@ -84,8 +88,9 @@ export const todoController: FastifyPluginAsync = async (
     async (request, reply) => {
       try {
         const id = request.params.id
-        const result = await deleteTodo(id)
-
+        const userNo = request.session.get('userNo')
+        if (!userNo) return reply.status(401).send({ message: 'AUTH ERROR' })
+        const result = await deleteTodo(id, userNo)
         if (result.affectedRows === 0) {
           return reply.status(404).send({ message: 'Todo not found' })
         }
