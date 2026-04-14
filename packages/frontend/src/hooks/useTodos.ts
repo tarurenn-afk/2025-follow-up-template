@@ -8,7 +8,7 @@ export function useTodos(): {
   mutate: KeyedMutator<Todo[]>
 } {
   const fetcher = async (url: string): Promise<Todo[]> => {
-    const res = await fetch(url)
+    const res = await fetch(url, { credentials: 'include' })
     if (!res.ok) {
       const status = res.status
       const body = await res.text()

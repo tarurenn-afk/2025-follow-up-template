@@ -4,6 +4,7 @@ export async function additionTodo(data: AddTodoRequest) {
   try {
     const write = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/todos`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },

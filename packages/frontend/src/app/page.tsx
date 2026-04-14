@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <>
       <h1>ToDo</h1>
-      <Link href='/todo'>リスト作成へ</Link>
+      <Link href='/login'>リスト作成へ</Link>
     </>
   )
 }

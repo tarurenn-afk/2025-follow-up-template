@@ -5,15 +5,25 @@ import {
   getTodoById,
   addTodo,
   updateTodo,
-  deleteTodo
+  deleteTodo,
+  getTodoUserId
 } from '@/service/todoService'
 
 export const todoController: FastifyPluginAsync = async (
   fastify: FastifyInstance
 ) => {
-  // 一覧取得（GET）
-  fastify.get('/todos', async (_, reply) => {
+  //　一覧取得（GET）
+  /*fastify.get('/todos', async (_, reply) => {
     const todos = await getAllTodos()
+    reply.status(200).send(todos)
+  })*/
+
+  //　一覧取得（GET）
+  fastify.get('/todos', async (request, reply) => {
+    const userNo = request.session.get('userNo')
+    console.log('userNo', userNo)
+    if (!userNo) return reply.status(401).send({ message: 'AUTH ERROR' })
+    const todos = await getTodoUserId(userNo)
     reply.status(200).send(todos)
   })
 
@@ -21,7 +31,9 @@ export const todoController: FastifyPluginAsync = async (
   fastify.post<{ Body: AddTodoRequest }>('/todos', async (request, reply) => {
     try {
       const body = request.body
-      const result = await addTodo(body)
+      const userNo = request.session.get('userNo')
+      if (!userNo) return reply.status(401).send({ message: 'AUTH ERROR' })
+      const result = await addTodo(body, userNo)
       reply.status(201).send({ message: 'Todo added', result })
     } catch (error) {
       console.error('POST /todos error:', error)
@@ -29,7 +41,7 @@ export const todoController: FastifyPluginAsync = async (
     }
   })
 
-  // 一件取得(GET)
+  //　一件取得(GET)
   fastify.get<{ Params: { id: number } }>(
     '/todos/:id',
     async (request, reply) => {
@@ -55,6 +67,7 @@ export const todoController: FastifyPluginAsync = async (
         id,
         title: request.body.title,
         content: request.body.content,
+        priority: request.body.priority,
         limitedDate: request.body.limitedDate
       }
 
@@ -65,7 +78,7 @@ export const todoController: FastifyPluginAsync = async (
       reply.status(500).send({ message: 'Failed to update todo' })
     }
   })
-  // 削除(DELETE)
+  //　削除(DELETE)
   fastify.delete<{ Params: { id: number } }>(
     '/todos/:id',
     async (request, reply) => {

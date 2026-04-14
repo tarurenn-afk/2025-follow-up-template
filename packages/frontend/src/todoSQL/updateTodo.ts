@@ -12,6 +12,7 @@ export async function updateTodo(data: EditTodoRequest) {
         body: JSON.stringify({
           title: data.title,
           content: data.content,
+          priority: data.priority,
           limitedDate: data.limitedDate
         })
       }

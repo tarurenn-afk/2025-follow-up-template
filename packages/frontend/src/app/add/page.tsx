@@ -6,7 +6,8 @@ import {
   Title,
   Container,
   Group,
-  TextInput
+  TextInput,
+  Select
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
@@ -19,7 +20,9 @@ import dayjs from 'dayjs'
 export default function Page() {
   const [title, setTitle] = useState<Todo['title']>('')
   const [content, setContent] = useState<Todo['content']>('')
+  const [priority, setPriority] = useState<Todo['priority']>('')
   const [limitedDate, setLimitedDate] = useState<Todo['limitedDate']>('')
+  const [userId, setUserId] = useState<Todo['userId']>('')
   const router = useRouter()
   const today = new Date()
   const dateFormat = (date: Date | null) => {
@@ -29,7 +32,11 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) {
-      alert('タイトルを入力してください。')
+      alert('タイトルを入力してください')
+      return
+    }
+    if (!priority.trim()) {
+      alert('優先度を入力してください')
       return
     }
     if (!limitedDate.trim()) {
@@ -40,7 +47,9 @@ export default function Page() {
     const check: AddTodoRequest = {
       title,
       content,
-      limitedDate
+      priority,
+      limitedDate,
+      userId
     }
 
     try {
@@ -74,6 +83,17 @@ export default function Page() {
             value={content}
             maxLength={200}
             onChange={(event) => setContent(event.currentTarget.value)}
+          />
+          <hr />
+          <Select
+            label='優先度'
+            description='優先度を選択してください'
+            placeholder='テキスト選択'
+            data={['高', '中', '低']}
+            value={priority}
+            onChange={(value) => {
+              if (value) setPriority(value as AddTodoRequest['priority'])
+            }}
           />
           <hr />
           <DatePickerInput

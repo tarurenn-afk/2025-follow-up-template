@@ -6,7 +6,8 @@ import {
   Title,
   Container,
   TextInput,
-  Group
+  Group,
+  Select
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
@@ -15,12 +16,13 @@ import { useState, useEffect } from 'react' //状態確認
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { updateTodo } from '@/todoSQL/updateTodo'
-import type { EditTodoRequest, Todo } from '@/shared/types'
+import type { Todo, EditTodoRequest } from '@/shared/types'
 import dayjs from 'dayjs'
 
 export default function Page() {
   const [title, setTitle] = useState<Todo['title']>('')
   const [content, setContent] = useState<Todo['content']>('')
+  const [priority, setPriority] = useState<Todo['priority']>('')
   const [limitedDate, setLimitedDate] = useState<Todo['limitedDate']>('')
   const searchParams = useSearchParams()
   const rawId = searchParams.get('id')
@@ -54,10 +56,15 @@ export default function Page() {
       alert('期限日を入力してください')
       return
     }
+    if (!priority.trim()) {
+      alert('優先度を入力してください')
+      return
+    }
     const check: EditTodoRequest = {
       id,
       title,
       content,
+      priority,
       limitedDate
     }
     try {
@@ -93,6 +100,16 @@ export default function Page() {
             onChange={(event) => setContent(event.currentTarget.value)}
           />
           <hr />
+          <Select
+            label='優先度'
+            description='優先度を選択してください'
+            placeholder='テキスト選択'
+            data={['高', '中', '低']}
+            value={priority}
+            onChange={(value) => {
+              if (value) setPriority(value as EditTodoRequest['priority'])
+            }}
+          />
           <DatePickerInput
             label='期限'
             description='期限の日付を入力してください'
@@ -108,7 +125,6 @@ export default function Page() {
             <Button variant='filled' type='submit'>
               更新
             </Button>
-
             <Link href='/todo'>
               <Button variant='filled'>戻る</Button>
             </Link>

@@ -16,7 +16,6 @@ export default function Page() {
   const { todos, error, isLoading, mutate } = useTodos()
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error fetching users: {error.message}</div>
-
   const handleDelete = async (id: number) => {
     const ok = confirm(`Id.${id}のTodoリストを削除しますか？`)
     if (!ok) return
@@ -37,6 +36,7 @@ export default function Page() {
             <Table.Th>番号</Table.Th>
             <Table.Th>タイトル</Table.Th>
             <Table.Th>内容</Table.Th>
+            <Table.Th>優先度</Table.Th>
             <Table.Th>期限日</Table.Th>
             <Table.Th>作成日</Table.Th>
             <Table.Th>更新日</Table.Th>
