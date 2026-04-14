@@ -8,6 +8,7 @@ import {
   Group,
   TextInput
 } from '@mantine/core'
+import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -32,6 +33,10 @@ export default function Page() {
   const handleSubmit = async () => {
     if (!title.trim()) {
       alert('タイトルを入力してください。')
+      return
+    }
+    if (!limitedDate.trim()) {
+      alert('期限日を入力してください。')
       return
     }
 
@@ -74,14 +79,15 @@ export default function Page() {
             onChange={(event) => setContent(event.currentTarget.value)}
           />
           <hr />
-          <TextInput
+          <DatePickerInput
             label='期限'
             description='期限の日付を入力してください'
             placeholder='テキスト入力'
-            type='date'
             value={limitedDate}
-            min={formatted}
-            onChange={(event) => setLimitedDate(event.currentTarget.value)}
+            minDate={formatted}
+            onChange={(date) => {
+              if (date) setLimitedDate(date)
+            }}
           />
           <hr />
           <Group gap='sm'>

@@ -8,12 +8,13 @@ import {
   TextInput,
   Group
 } from '@mantine/core'
+import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
 import { useState, useEffect } from 'react' //状態確認
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { updateTodo } from '@/app/todoSQL/updateTodo'
-import type { Todo, EditTodo } from '@/shared/types'
+import type { EditTodo, Todo } from '@/shared/types'
 
 export default function Page() {
   const [title, setTitle] = useState<EditTodo['title']>('')
@@ -57,6 +58,10 @@ export default function Page() {
       alert('タイトルを入力してください')
       return
     }
+    if (!limitedDate.trim()) {
+      alert('期限日を入力してください')
+      return
+    }
     const check: EditTodo = {
       id,
       title,
@@ -70,7 +75,6 @@ export default function Page() {
       alert('送信失敗')
     }
   }
-
   return (
     <Container size='md' mt='xl'>
       <Title order={2} mb='md'>
@@ -97,14 +101,15 @@ export default function Page() {
             onChange={(event) => setContent(event.currentTarget.value)}
           />
           <hr />
-          <TextInput
+          <DatePickerInput
             label='期限'
             description='期限の日付を入力してください'
             placeholder='テキスト入力'
-            type='date'
             value={limitedDate}
-            min={formatted}
-            onChange={(event) => setLimitedDate(event.currentTarget.value)}
+            minDate={formatted}
+            onChange={(date) => {
+              if (date) setLimitedDate(date)
+            }}
           />
           <hr />
           <Group gap='sm'>
