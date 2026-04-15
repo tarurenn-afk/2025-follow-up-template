@@ -1,5 +1,5 @@
 import type { FastifyPluginAsync, FastifyInstance } from 'fastify'
-import type { AddTodo, EditTodo } from '@/types'
+import type { AddTodoRequest, EditTodoRequest } from '@/types'
 import {
   getAllTodos,
   getTodoById,
@@ -18,7 +18,7 @@ export const todoController: FastifyPluginAsync = async (
   })
 
   // 登録（POST）
-  fastify.post<{ Body: AddTodo }>('/todos', async (request, reply) => {
+  fastify.post<{ Body: AddTodoRequest }>('/todos', async (request, reply) => {
     try {
       const body = request.body
       const result = await addTodo(body)
@@ -47,11 +47,11 @@ export const todoController: FastifyPluginAsync = async (
   // 更新(PUT)
   fastify.put<{
     Params: { id: number }
-    Body: Omit<EditTodo, 'id'>
+    Body: Omit<EditTodoRequest, 'id'>
   }>('/todos/:id', async (request, reply) => {
     try {
       const id = request.params.id
-      const todo: EditTodo = {
+      const todo: EditTodoRequest = {
         id,
         title: request.body.title,
         content: request.body.content,

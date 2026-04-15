@@ -1,6 +1,6 @@
 import { pool } from '@/db'
 import type { RowDataPacket, ResultSetHeader } from 'mysql2'
-import type { AddTodo, EditTodo } from '@/types'
+import type { AddTodoRequest, EditTodoRequest } from '@/types'
 
 export const getAllTodos = async () => {
   try {
@@ -45,7 +45,7 @@ export const getTodoById = async (id: number) => {
   }
 }
 
-export const addTodo = async (data: AddTodo) => {
+export const addTodo = async (data: AddTodoRequest) => {
   const { title, content, limitedDate } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
@@ -59,7 +59,7 @@ export const addTodo = async (data: AddTodo) => {
   }
 }
 
-export const updateTodo = async (data: EditTodo) => {
+export const updateTodo = async (data: EditTodoRequest) => {
   const { title, content, limitedDate, id } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(

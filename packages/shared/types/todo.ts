@@ -6,3 +6,16 @@ export type Todo = {
   createdAt: string
   updatedAt: string
 }
+
+export type AddTodoRequest = {
+  title: string
+  content: string
+  limitedDate: string
+}
+
+export type EditTodoRequest = {
+  id: number
+  title: string
+  content: string
+  limitedDate: string
+}
