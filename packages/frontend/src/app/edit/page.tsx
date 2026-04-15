@@ -10,11 +10,12 @@ import {
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
+import { useTodo } from '@/app/hooks/useTodo'
 import { useState, useEffect } from 'react' //状態確認
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { updateTodo } from '@/app/todoSQL/updateTodo'
-import type { EditTodo, Todo } from '@/shared/types'
+import type { EditTodo } from '@/shared/types'
 
 export default function Page() {
   const [title, setTitle] = useState<EditTodo['title']>('')
@@ -34,24 +35,15 @@ export default function Page() {
     .split('/')
     .join('-')
 
+  const { todo, error } = useTodo(id)
+
   useEffect(() => {
-    if (!id) return
-    const fetchTodo = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`
-        )
-        if (!res.ok) throw new Error('Failed to fetch todo')
-        const todos: Todo = await res.json()
-        setTitle(todos.title)
-        setContent(todos.content)
-        setLimitedDate(todos.limitedDate)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    fetchTodo()
-  }, [id])
+    if (!todo) return
+    setTitle(todo.title)
+    setContent(todo.content)
+    setLimitedDate(todo.limitedDate)
+  }, [todo])
+  if (error) return <div>Error fetching todo: {error.message}</div>
 
   const handleSubmit = async () => {
     if (!title.trim()) {
