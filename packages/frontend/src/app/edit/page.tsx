@@ -45,7 +45,8 @@ export default function Page() {
   }, [todo])
   if (error) return <div>Error fetching todo: {error.message}</div>
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     if (!title.trim()) {
       alert('タイトルを入力してください')
       return

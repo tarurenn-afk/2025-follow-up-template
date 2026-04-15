@@ -30,7 +30,8 @@ export default function Page() {
     .split('/')
     .join('-')
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     if (!title.trim()) {
       alert('タイトルを入力してください。')
       return
