@@ -4,37 +4,15 @@ import { Table, Title, Container, Button } from '@mantine/core'
 import { useTodos } from '@/app/hooks/useTodos'
 import { deleteTodo } from '@/app/todoSQL/deleteTodo'
 import Link from 'next/link'
+import dayjs from 'dayjs'
 
-function formatDateTime(dateString: string) {
-  const today = new Date(dateString)
-  const formatted = today
-    .toLocaleDateString('ja-JP', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    })
-    .split('/')
-    .join('-')
-
-  return formatted
-}
-
-function formatDate(dateString: string) {
-  const today = new Date(dateString)
-  const formatted = today
-    .toLocaleDateString('ja-JP', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    })
-    .split('/')
-    .join('-')
-  return formatted
-}
 export default function Page() {
+  const dateFormat = (date: string) => {
+    return dayjs(date).format('YYYY-MM-DD')
+  }
+  const datetimeFormat = (date: string) => {
+    return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+  }
   const { todos, error, isLoading, mutate } = useTodos()
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error fetching users: {error.message}</div>
@@ -70,9 +48,9 @@ export default function Page() {
               <Table.Td>{todo.id}</Table.Td>
               <Table.Td>{todo.title}</Table.Td>
               <Table.Td>{todo.content}</Table.Td>
-              <Table.Td>{formatDate(todo.limitedDate)}</Table.Td>
-              <Table.Td>{formatDateTime(todo.createdAt)}</Table.Td>
-              <Table.Td>{formatDateTime(todo.updatedAt)}</Table.Td>
+              <Table.Td>{dateFormat(todo.limitedDate)}</Table.Td>
+              <Table.Td>{datetimeFormat(todo.createdAt)}</Table.Td>
+              <Table.Td>{datetimeFormat(todo.updatedAt)}</Table.Td>
               <Table.Td>
                 <Link href={`/edit?id=${todo.id}`}>
                   <Button variant='filled'>編集</Button>

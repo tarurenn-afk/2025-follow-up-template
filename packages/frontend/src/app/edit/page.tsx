@@ -16,6 +16,7 @@ import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { updateTodo } from '@/app/todoSQL/updateTodo'
 import type { EditTodo } from '@/shared/types'
+import dayjs from 'dayjs'
 
 export default function Page() {
   const [title, setTitle] = useState<EditTodo['title']>('')
@@ -26,22 +27,20 @@ export default function Page() {
   const id = Number(rawId)
   const router = useRouter()
   const today = new Date()
-  const formatted = today
-    .toLocaleDateString('ja-JP', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    })
-    .split('/')
-    .join('-')
+  const dateFormat = (date: Date | null) => {
+    return dayjs(date).format('YYYY-MM-DD')
+  }
 
   const { todo, error } = useTodo(id)
 
   useEffect(() => {
+    const dateFormat = (date: string | null) => {
+      return dayjs(date).format('YYYY-MM-DD')
+    }
     if (!todo) return
     setTitle(todo.title)
     setContent(todo.content)
-    setLimitedDate(todo.limitedDate)
+    setLimitedDate(dateFormat(todo.limitedDate))
   }, [todo])
   if (error) return <div>Error fetching todo: {error.message}</div>
 
@@ -99,7 +98,7 @@ export default function Page() {
             description='期限の日付を入力してください'
             placeholder='テキスト入力'
             value={limitedDate}
-            minDate={formatted}
+            minDate={dateFormat(today)}
             onChange={(date) => {
               if (date) setLimitedDate(date)
             }}

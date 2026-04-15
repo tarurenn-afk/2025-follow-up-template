@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { writeTodo } from '@/app/todoSQL/writeTodo'
 import type { AddTodo } from '@/shared/types'
+import dayjs from 'dayjs'
 
 export default function Page() {
   const [title, setTitle] = useState<AddTodo['title']>('')
@@ -21,14 +22,9 @@ export default function Page() {
   const [limitedDate, setLimitedDate] = useState<AddTodo['limitedDate']>('')
   const router = useRouter()
   const today = new Date()
-  const formatted = today
-    .toLocaleDateString('ja-JP', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    })
-    .split('/')
-    .join('-')
+  const dateFormat = (date: Date | null) => {
+    return dayjs(date).format('YYYY-MM-DD')
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -85,7 +81,7 @@ export default function Page() {
             description='期限の日付を入力してください'
             placeholder='テキスト入力'
             value={limitedDate}
-            minDate={formatted}
+            minDate={dateFormat(today)}
             onChange={(date) => {
               if (date) setLimitedDate(date)
             }}
