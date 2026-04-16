@@ -1,6 +1,6 @@
-import type { AddUser } from '@/shared/types'
+import type { AddUserRequest } from '@/shared/types'
 
-export async function writeUser(data: AddUser) {
+export async function additionUser(data: AddUserRequest) {
   try {
     const write = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
       method: 'POST',

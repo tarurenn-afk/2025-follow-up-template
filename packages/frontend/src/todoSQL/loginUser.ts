@@ -1,6 +1,6 @@
-import type { CheckUser } from '@/shared/types'
+import type { CheckUserRequest } from '@/shared/types'
 
-export async function checkUser(data: CheckUser) {
+export async function loginUser(data: CheckUserRequest) {
   try {
     const check = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/users/${data.userId}`,

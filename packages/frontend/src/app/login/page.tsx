@@ -11,13 +11,12 @@ import {
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { CheckUser } from '@/shared/types'
-import { checkUser } from '@/todoSQL/checkUser'
+import type { CheckUserRequest, User } from '@/shared/types'
+import { loginUser } from '@/todoSQL/loginUser'
 
 export default function Page() {
-  const [userId, setUserId] = useState<CheckUser['userId']>('')
-  const [passwordHash, setPasswordHash] =
-    useState<CheckUser['passwordHash']>('')
+  const [userId, setUserId] = useState<User['userId']>('')
+  const [passwordHash, setPasswordHash] = useState<User['passwordHash']>('')
   const router = useRouter()
   const handleSubmit = async () => {
     if (!userId.trim()) {
@@ -29,13 +28,13 @@ export default function Page() {
       return
     }
 
-    const check: CheckUser = {
+    const check: CheckUserRequest = {
       userId,
       passwordHash
     }
 
     try {
-      await checkUser(check)
+      await loginUser(check)
       router.push('/todo')
       console.log('router')
     } catch {
