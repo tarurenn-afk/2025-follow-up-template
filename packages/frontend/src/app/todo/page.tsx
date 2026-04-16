@@ -7,12 +7,24 @@ import Link from 'next/link'
 import dayjs from 'dayjs'
 
 export default function Page() {
+  const today = new Date()
   const dateFormat = (date: string) => {
     return dayjs(date).format('YYYY-MM-DD')
   }
   const datetimeFormat = (date: string) => {
     return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
   }
+  const dateDiff = (date: string) => {
+    const dif = Number(dayjs(date).diff(dayjs(today), 'day'))
+    return dif
+  }
+
+  const colorSetting = (limit: number) => {
+    if (limit > 7) return 'rgb(0, 255, 0)'
+    if (limit <= 7 && limit > 0) return 'rgb(255, 255, 0)'
+    if (limit <= 0) return 'rgb(255,0,0)'
+  }
+
   const { todos, error, isLoading, mutate } = useTodos()
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error fetching users: {error.message}</div>
@@ -44,7 +56,12 @@ export default function Page() {
         </Table.Thead>
         <Table.Tbody>
           {todos?.map((todo) => (
-            <Table.Tr key={todo.id}>
+            <Table.Tr
+              key={todo.id}
+              style={{
+                backgroundColor: colorSetting(dateDiff(todo.limitedDate))
+              }}
+            >
               <Table.Td>{todo.id}</Table.Td>
               <Table.Td>{todo.title}</Table.Td>
               <Table.Td>{todo.content}</Table.Td>
