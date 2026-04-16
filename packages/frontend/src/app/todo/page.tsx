@@ -1,8 +1,8 @@
 'use client'
 
 import { Table, Title, Container, Button } from '@mantine/core'
-import { useTodos } from '@/app/hooks/useTodos'
-import { deleteTodo } from '@/app/todoSQL/deleteTodo'
+import { useTodos } from '@/hooks/useTodos'
+import { deleteTodo } from '@/todoSQL/deleteTodo'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
@@ -58,15 +58,9 @@ export default function Page() {
               </Table.Td>
 
               <Table.Td>
-                <form
-                  onSubmit={() => {
-                    handleDelete(todo.id)
-                  }}
-                >
-                  <Button variant='filled' type='submit'>
-                    削除
-                  </Button>
-                </form>
+                <Button variant='filled' onClick={() => handleDelete(todo.id)}>
+                  削除
+                </Button>
               </Table.Td>
             </Table.Tr>
           ))}
