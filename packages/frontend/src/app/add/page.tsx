@@ -22,7 +22,6 @@ export default function Page() {
   const [content, setContent] = useState<Todo['content']>('')
   const [priority, setPriority] = useState<Todo['priority']>('')
   const [limitedDate, setLimitedDate] = useState<Todo['limitedDate']>('')
-  const [userId, setUserId] = useState<Todo['userId']>('')
   const router = useRouter()
   const today = new Date()
   const dateFormat = (date: Date | null) => {
@@ -48,8 +47,7 @@ export default function Page() {
       title,
       content,
       priority,
-      limitedDate,
-      userId
+      limitedDate
     }
 
     try {

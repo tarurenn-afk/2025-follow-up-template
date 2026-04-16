@@ -14,7 +14,6 @@ export type AddTodoRequest = {
   content: string
   priority: string
   limitedDate: string
-  userId: string
 }
 export type EditTodoRequest = {
   id: number
