@@ -1,23 +1,23 @@
 import type { FastifyPluginAsync, FastifyInstance } from 'fastify'
-import type { AddUser, CheckUser } from '@/types'
+import type { AddUserRequest, CheckUserRequest } from '@/types'
 import { addUser, getUserNo, getAllUser } from '@/service/userService'
 
 export const userController: FastifyPluginAsync = async (
   fastify: FastifyInstance
 ) => {
-  //全ユーザーデータ取得(GET)
+  //　全ユーザーデータ取得(GET)
   fastify.get('/users', async (_, reply) => {
     const users = await getAllUser()
     reply.status(200).send(users)
   })
-  //ユーザーデータ一件取得(POST)
-  fastify.post<{ Body: CheckUser }>(
-    '/users/:userId',
+  // ログイン(POST)
+  fastify.post<{ Body: CheckUserRequest }>(
+    '/auth/login',
     async (request, reply) => {
       try {
         const userId = request.body.userId
         const user = await getUserNo(userId)
-        const checkUser: CheckUser = {
+        const checkUser: CheckUserRequest = {
           userId,
           passwordHash: request.body.passwordHash
         }
@@ -30,7 +30,6 @@ export const userController: FastifyPluginAsync = async (
         if (!check)
           return reply.status(401).send({ message: 'Invalid id or password' })
         request.session.set('userNo', user.user_no)
-        console.log(request.session)
         reply.status(200).send(user)
       } catch (error) {
         console.error('GET /users/:id error:', error)
@@ -39,22 +38,23 @@ export const userController: FastifyPluginAsync = async (
     }
   )
   //ユーザーデータ追加(POST)
-  fastify.post<{ Body: AddUser }>('/users', async (request, reply) => {
-    try {
-      const user_Id = request.body.userId
-      const pass = await request.bcryptHash(request.body.passwordHash)
-      const User: AddUser = {
-        userId: user_Id,
-        passwordHash: pass
+  fastify.post<{ Body: AddUserRequest }>(
+    '/auth/user',
+    async (request, reply) => {
+      try {
+        const user_Id = request.body.userId
+        const pass = await request.bcryptHash(request.body.passwordHash)
+        const User: AddUserRequest = {
+          userId: user_Id,
+          passwordHash: pass
+        }
+        const result = await addUser(User)
+        request.session.set('userNo', result.insertId)
+        reply.status(201).send({ message: 'User added', result })
+      } catch (error) {
+        console.error('POST /users error:', error)
+        reply.status(500).send({ message: 'Failed to add todo' })
       }
-      console.log(request.body)
-      const result = await addUser(User)
-      request.session.set('userNo', result.insertId)
-      console.log(request.session)
-      reply.status(201).send({ message: 'User added', result })
-    } catch (error) {
-      console.error('POST /users error:', error)
-      reply.status(500).send({ message: 'Failed to add todo' })
     }
-  })
+  )
 }

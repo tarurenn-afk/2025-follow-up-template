@@ -2,7 +2,7 @@ import type { AddUserRequest } from '@/shared/types'
 
 export async function additionUser(data: AddUserRequest) {
   try {
-    const write = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+    const write = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/user`, {
       method: 'POST',
       credentials: 'include',
       headers: {

@@ -1,7 +1,6 @@
 import type { FastifyPluginAsync, FastifyInstance } from 'fastify'
 import type { AddTodoRequest, EditTodoRequest } from '@/types'
 import {
-  getAllTodos,
   getTodoById,
   addTodo,
   updateTodo,
@@ -13,15 +12,8 @@ export const todoController: FastifyPluginAsync = async (
   fastify: FastifyInstance
 ) => {
   //　一覧取得（GET）
-  /*fastify.get('/todos', async (_, reply) => {
-    const todos = await getAllTodos()
-    reply.status(200).send(todos)
-  })*/
-
-  //　一覧取得（GET）
   fastify.get('/todos', async (request, reply) => {
     const userNo = request.session.get('userNo')
-    console.log('userNo', userNo)
     if (!userNo) return reply.status(401).send({ message: 'AUTH ERROR' })
     const todos = await getTodoUserId(userNo)
     reply.status(200).send(todos)
@@ -73,7 +65,6 @@ export const todoController: FastifyPluginAsync = async (
       }
       const userNo = request.session.get('userNo')
       request.session.set('userNo', userNo)
-      console.log(userNo)
       if (!userNo) return reply.status(401).send({ message: 'AUTH ERROR' })
       const result = await updateTodo(todo, userNo)
       reply.status(200).send({ message: 'Todo updated', result })

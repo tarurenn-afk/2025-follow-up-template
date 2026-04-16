@@ -2,17 +2,14 @@ import type { CheckUserRequest } from '@/shared/types'
 
 export async function loginUser(data: CheckUserRequest) {
   try {
-    const check = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/users/${data.userId}`,
-      {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      }
-    )
+    const check = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
     if (!check.ok) {
       const status = check.status
       const body = await check.text()

@@ -1,6 +1,6 @@
 import { pool } from '@/db'
 import type { RowDataPacket, ResultSetHeader } from 'mysql2'
-import type { AddUser } from '@/types'
+import type { AddUserRequest } from '@/types'
 
 export const getAllUser = async () => {
   try {
@@ -23,7 +23,6 @@ export const getUserNo = async (userId: string) => {
       'SELECT user_no,password_hash FROM users WHERE user_id = ?',
       [userId]
     )
-
     if (rows.length === 0) return null
 
     const row = rows[0]
@@ -37,7 +36,7 @@ export const getUserNo = async (userId: string) => {
   }
 }
 
-export const addUser = async (data: AddUser) => {
+export const addUser = async (data: AddUserRequest) => {
   const { userId, passwordHash } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
