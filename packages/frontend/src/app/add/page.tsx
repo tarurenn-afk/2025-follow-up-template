@@ -12,14 +12,14 @@ import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { writeTodo } from '@/app/todoSQL/writeTodo'
-import type { AddTodo } from '@/shared/types'
+import { additionTodo } from '@/todoSQL/additionTodo'
+import type { Todo, AddTodoRequest } from '@/shared/types'
 import dayjs from 'dayjs'
 
 export default function Page() {
-  const [title, setTitle] = useState<AddTodo['title']>('')
-  const [content, setContent] = useState<AddTodo['content']>('')
-  const [limitedDate, setLimitedDate] = useState<AddTodo['limitedDate']>('')
+  const [title, setTitle] = useState<Todo['title']>('')
+  const [content, setContent] = useState<Todo['content']>('')
+  const [limitedDate, setLimitedDate] = useState<Todo['limitedDate']>('')
   const router = useRouter()
   const today = new Date()
   const dateFormat = (date: Date | null) => {
@@ -37,14 +37,14 @@ export default function Page() {
       return
     }
 
-    const check: AddTodo = {
+    const check: AddTodoRequest = {
       title,
       content,
       limitedDate
     }
 
     try {
-      await writeTodo(check)
+      await additionTodo(check)
       router.push('/todo')
     } catch {
       alert('送信失敗')

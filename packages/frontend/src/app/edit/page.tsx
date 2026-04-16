@@ -10,18 +10,18 @@ import {
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
-import { useTodo } from '@/app/hooks/useTodo'
+import { useTodo } from '@/hooks/useTodo'
 import { useState, useEffect } from 'react' //状態確認
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import { updateTodo } from '@/app/todoSQL/updateTodo'
-import type { EditTodo } from '@/shared/types'
+import { updateTodo } from '@/todoSQL/updateTodo'
+import type { EditTodoRequest, Todo } from '@/shared/types'
 import dayjs from 'dayjs'
 
 export default function Page() {
-  const [title, setTitle] = useState<EditTodo['title']>('')
-  const [content, setContent] = useState<EditTodo['content']>('')
-  const [limitedDate, setLimitedDate] = useState<EditTodo['limitedDate']>('')
+  const [title, setTitle] = useState<Todo['title']>('')
+  const [content, setContent] = useState<Todo['content']>('')
+  const [limitedDate, setLimitedDate] = useState<Todo['limitedDate']>('')
   const searchParams = useSearchParams()
   const rawId = searchParams.get('id')
   const id = Number(rawId)
@@ -54,7 +54,7 @@ export default function Page() {
       alert('期限日を入力してください')
       return
     }
-    const check: EditTodo = {
+    const check: EditTodoRequest = {
       id,
       title,
       content,
