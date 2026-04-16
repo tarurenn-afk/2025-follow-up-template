@@ -21,9 +21,5 @@ export function useTodo(id: number): {
     fetcher
   )
 
-<<<<<<< HEAD
   return { todo: data, error }
-=======
-  return { todos: data || null, error, isLoading, mutate }
->>>>>>> c1df074 (fix conflict)
 }

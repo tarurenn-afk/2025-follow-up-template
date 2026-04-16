@@ -12,7 +12,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { CheckUser } from '@/shared/types'
-import { checkUser } from '@/app/todoSQL/checkUser'
+import { checkUser } from '@/todoSQL/checkUser'
 
 export default function Page() {
   const [userId, setUserId] = useState<CheckUser['userId']>('')

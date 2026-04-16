@@ -42,6 +42,7 @@ export default function Page() {
     if (!todo) return
     setTitle(todo.title)
     setContent(todo.content)
+    setPriority(todo.priority)
     setLimitedDate(dateFormat(todo.limitedDate))
   }, [todo])
   if (error) return <div>Error fetching todo: {error.message}</div>

@@ -12,7 +12,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { AddUser } from '@/shared/types'
-import { writeUser } from '@/app/todoSQL/writeUser'
+import { writeUser } from '@/todoSQL/writeUser'
 
 export default function Page() {
   const [userId, setUserId] = useState<AddUser['userId']>('')

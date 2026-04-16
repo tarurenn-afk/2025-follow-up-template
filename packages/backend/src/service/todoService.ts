@@ -47,7 +47,7 @@ export const getTodoUserId = async (userNo: number) => {
 export const getTodoById = async (id: number) => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT id, title, content, priority_content, limit_date,created_at, updated_at,user_id FROM todos WHERE id = ?',
+      'SELECT id, title, content, priority_content, limit_date,created_at, updated_at,user_no FROM todos WHERE id = ?',
       [id]
     )
     if (rows.length === 0) return null
@@ -83,12 +83,12 @@ export const addTodo = async (data: AddTodoRequest, userNo: number) => {
   }
 }
 
-export const updateTodo = async (data: EditTodoRequest) => {
+export const updateTodo = async (data: EditTodoRequest, userNo: number) => {
   const { title, content, priority, limitedDate, id } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'UPDATE todos SET title = ?, content = ?, priority_content=?, limit_date=?, updated_at = NOW() WHERE id = ?',
-      [title, content, priority, limitedDate, id]
+      'UPDATE todos SET title = ?, content = ?, priority_content=?, limit_date=?, updated_at = NOW() WHERE id = ? AND user_no = ?',
+      [title, content, priority, limitedDate, id, userNo]
     )
     return result
   } catch (error) {
@@ -97,11 +97,11 @@ export const updateTodo = async (data: EditTodoRequest) => {
   }
 }
 
-export const deleteTodo = async (id: number) => {
+export const deleteTodo = async (id: number, userNo: number) => {
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'DELETE FROM todos WHERE id = ?',
-      [id]
+      'DELETE FROM todos WHERE id = ? AND user_no = ?',
+      [id, userNo]
     )
     return result
   } catch (error) {

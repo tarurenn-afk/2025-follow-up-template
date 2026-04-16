@@ -48,6 +48,7 @@ export default function Page() {
               <Table.Td>{todo.id}</Table.Td>
               <Table.Td>{todo.title}</Table.Td>
               <Table.Td>{todo.content}</Table.Td>
+              <Table.Td>{todo.priority}</Table.Td>
               <Table.Td>{dateFormat(todo.limitedDate)}</Table.Td>
               <Table.Td>{datetimeFormat(todo.createdAt)}</Table.Td>
               <Table.Td>{datetimeFormat(todo.updatedAt)}</Table.Td>
