@@ -50,14 +50,16 @@ export default function Page() {
       <Link href='/add'>
         <Button variant='filled'>追加</Button>
       </Link>
-      <Button
-        variant='filled'
-        onClick={() => {
-          handleLogout()
-        }}
-      >
-        ログアウト
-      </Button>
+      <Link href={'/Login'}>
+        <Button
+          variant='filled'
+          onClick={() => {
+            handleLogout()
+          }}
+        >
+          ログアウト
+        </Button>
+      </Link>
       <Table
         striped
         highlightOnHover
@@ -98,6 +100,7 @@ export default function Page() {
               <Table.Td>{datetimeFormat(todo.createdAt)}</Table.Td>
               <Table.Td>{datetimeFormat(todo.updatedAt)}</Table.Td>
               <Table.Td>{todo.publicOn ? '公開' : '非公開'}</Table.Td>
+
               <Table.Td>
                 <Stack gap='xs'>
                   <Link href={`/edit?id=${todo.id}`}>

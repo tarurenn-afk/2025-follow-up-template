@@ -7,7 +7,7 @@ export type Todo = {
   publicOn: boolean
   createdAt: string
   updatedAt: string
-  userId: string
+  userNo: number
 }
 
 export type AddTodoRequest = {

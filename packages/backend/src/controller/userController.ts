@@ -42,10 +42,10 @@ export const userController: FastifyPluginAsync = async (
     '/auth/user',
     async (request, reply) => {
       try {
-        const user_Id = request.body.userId
+        const userId = request.body.userId
         const pass = await request.bcryptHash(request.body.passwordHash)
         const User: AddUserRequest = {
-          userId: user_Id,
+          userId: userId,
           passwordHash: pass
         }
         const result = await addUser(User)
@@ -57,9 +57,26 @@ export const userController: FastifyPluginAsync = async (
       }
     }
   )
+  /*
+  fastify.post('auth/nullUser', async (_, reply) => {
+    try {
+      const userId = 'guestUser'
+      const password = 'password'
+      const User: AddUserRequest = {
+        userId: userId,
+        passwordHash: password
+      }
+      const result = await addUser(User)
+      reply.status(201).send({ message: 'User added', result })
+    } catch (error) {
+      console.error('POST /users error:', error)
+      reply.status(500).send({ message: 'Failed to logout user' })
+    }
+  })*/
   fastify.delete('/auth/logout', async (request, reply) => {
     try {
       request.session.delete()
+      reply.status(200).send({ message: 'You Logout' })
     } catch (error) {
       console.error('POST /users error:', error)
       reply.status(500).send({ message: 'Failed to logout user' })
