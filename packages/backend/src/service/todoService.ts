@@ -26,7 +26,7 @@ import type { AddTodoRequest, EditTodoRequest } from '@/types'
 export const getTodoUserId = async (userNo: number) => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT id, title, content, priority_content, limit_date, public_on, created_at, updated_at, user_no FROM todos WHERE user_no = ?',
+      'SELECT id, title, content, priority_content, limit_date, public_on, created_at, updated_at, user_no FROM todos WHERE user_no = ? OR public_on = TRUE',
       [userNo]
     )
     return rows.map((row) => ({
@@ -48,7 +48,7 @@ export const getTodoUserId = async (userNo: number) => {
 export const getTodoById = async (id: number) => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT id, title, content, priority_content, limit_date,created_at, updated_at,user_no FROM todos WHERE id = ?',
+      'SELECT id, title, content, priority_content, limit_date, public_on, created_at, updated_at,user_no FROM todos WHERE id = ?',
       [id]
     )
     if (rows.length === 0) return null
