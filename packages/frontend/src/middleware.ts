@@ -4,7 +4,7 @@ export function middleware(request: NextRequest) {
   console.log(request.nextUrl.pathname)
   const cookie = request.cookies.get('userNo')
   const { pathname } = request.nextUrl
-  if (pathname === '/' || pathname === '/login' || pathname === '/userCreate') {
+  if (pathname === '/' || pathname === '/login' || pathname === '/newUser') {
     return NextResponse.next()
   }
   if (!cookie) {
