@@ -57,4 +57,12 @@ export const userController: FastifyPluginAsync = async (
       }
     }
   )
+  fastify.delete('/auth/logout', async (request, reply) => {
+    try {
+      request.session.delete()
+    } catch (error) {
+      console.error('POST /users error:', error)
+      reply.status(500).send({ message: 'Failed to logout user' })
+    }
+  })
 }

@@ -49,3 +49,16 @@ export const addUser = async (data: AddUserRequest) => {
     throw error
   }
 }
+
+export const logoutUser = async (userNo: number) => {
+  try {
+    const [result] = await pool.query<ResultSetHeader>(
+      'SELECT user_no,password_hash FROM users WHERE user_no = ?',
+      [userNo]
+    )
+    return result
+  } catch (error) {
+    console.error('Error inserting user:', error)
+    throw error
+  }
+}
