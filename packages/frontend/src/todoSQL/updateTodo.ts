@@ -14,7 +14,8 @@ export async function updateTodo(data: EditTodoRequest) {
           title: data.title,
           content: data.content,
           priority: data.priority,
-          limitedDate: data.limitedDate
+          limitedDate: data.limitedDate,
+          publicOn: data.publicOn
         })
       }
     )

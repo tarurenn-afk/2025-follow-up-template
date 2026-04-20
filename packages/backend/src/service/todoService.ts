@@ -2,7 +2,7 @@ import { pool } from '@/db'
 import type { RowDataPacket, ResultSetHeader } from 'mysql2'
 import type { AddTodoRequest, EditTodoRequest } from '@/types'
 
-export const getAllTodos = async () => {
+/*export const getAllTodos = async () => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
       'SELECT id, title, content, priority_content, limit_date,created_at, updated_at,user_no FROM todos ORDER BY id ASC'
@@ -21,12 +21,12 @@ export const getAllTodos = async () => {
     console.error('Error fetching todo:', error)
     throw error
   }
-}
+}*/
 
 export const getTodoUserId = async (userNo: number) => {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT id, title, content, priority_content, limit_date,created_at, updated_at,user_no FROM todos WHERE user_no = ?',
+      'SELECT id, title, content, priority_content, limit_date, public_on, created_at, updated_at, user_no FROM todos WHERE user_no = ?',
       [userNo]
     )
     return rows.map((row) => ({
@@ -35,6 +35,7 @@ export const getTodoUserId = async (userNo: number) => {
       content: row.content,
       priority: row.priority_content,
       limitedDate: row.limit_date,
+      publicOn: row.public_on,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
       userNo: row.user_no
@@ -70,11 +71,11 @@ export const getTodoById = async (id: number) => {
 }
 
 export const addTodo = async (data: AddTodoRequest, userNo: number) => {
-  const { title, content, priority, limitedDate } = data
+  const { title, content, priority, limitedDate, publicOn } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'INSERT INTO todos (title, content, priority_content, limit_date, created_at, updated_at, user_no) VALUES (?, ?, ?, ?, NOW(), NOW(), ?)',
-      [title, content, priority, limitedDate, userNo]
+      'INSERT INTO todos (title, content, priority_content, limit_date, public_on, created_at, updated_at, user_no) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?)',
+      [title, content, priority, limitedDate, publicOn, userNo]
     )
     return result
   } catch (error) {
@@ -84,11 +85,11 @@ export const addTodo = async (data: AddTodoRequest, userNo: number) => {
 }
 
 export const updateTodo = async (data: EditTodoRequest, userNo: number) => {
-  const { title, content, priority, limitedDate, id } = data
+  const { title, content, priority, limitedDate, publicOn, id } = data
   try {
     const [result] = await pool.query<ResultSetHeader>(
-      'UPDATE todos SET title = ?, content = ?, priority_content=?, limit_date=?, updated_at = NOW() WHERE id = ? AND user_no = ?',
-      [title, content, priority, limitedDate, id, userNo]
+      'UPDATE todos SET title = ?, content = ?, priority_content= ?, limit_date = ?, public_on = ? , updated_at = NOW() WHERE id = ? AND user_no = ?',
+      [title, content, priority, limitedDate, publicOn, id, userNo]
     )
     return result
   } catch (error) {

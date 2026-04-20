@@ -4,6 +4,7 @@ export type Todo = {
   content: string
   priority: string
   limitedDate: string
+  publicOn: boolean
   createdAt: string
   updatedAt: string
   userId: string
@@ -14,6 +15,7 @@ export type AddTodoRequest = {
   content: string
   priority: string
   limitedDate: string
+  publicOn: boolean
 }
 export type EditTodoRequest = {
   id: number
@@ -21,4 +23,5 @@ export type EditTodoRequest = {
   content: string
   priority: string
   limitedDate: string
+  publicOn: boolean
 }

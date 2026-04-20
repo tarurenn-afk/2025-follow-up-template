@@ -7,7 +7,8 @@ import {
   Container,
   Group,
   TextInput,
-  Select
+  Select,
+  Checkbox
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
@@ -22,6 +23,7 @@ export default function Page() {
   const [content, setContent] = useState<Todo['content']>('')
   const [priority, setPriority] = useState<Todo['priority']>('')
   const [limitedDate, setLimitedDate] = useState<Todo['limitedDate']>('')
+  const [publicOn, setPublicOn] = useState<Todo['publicOn']>(false)
   const router = useRouter()
   const today = new Date()
   const dateFormat = (date: Date | null) => {
@@ -47,7 +49,8 @@ export default function Page() {
       title,
       content,
       priority,
-      limitedDate
+      limitedDate,
+      publicOn
     }
 
     try {
@@ -103,6 +106,12 @@ export default function Page() {
             onChange={(date) => {
               if (date) setLimitedDate(date)
             }}
+          />
+          <hr />
+          <Checkbox
+            label='公開しますか？'
+            checked={publicOn}
+            onChange={(event) => setPublicOn(event.currentTarget.checked)}
           />
           <hr />
           <Group gap='sm'>

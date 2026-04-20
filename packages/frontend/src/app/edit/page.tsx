@@ -7,7 +7,8 @@ import {
   Container,
   TextInput,
   Group,
-  Select
+  Select,
+  Checkbox
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import Link from 'next/link'
@@ -24,6 +25,7 @@ export default function Page() {
   const [content, setContent] = useState<Todo['content']>('')
   const [priority, setPriority] = useState<Todo['priority']>('')
   const [limitedDate, setLimitedDate] = useState<Todo['limitedDate']>('')
+  const [publicOn, setPublicOn] = useState<Todo['publicOn']>(false || true)
   const searchParams = useSearchParams()
   const rawId = searchParams.get('id')
   const id = Number(rawId)
@@ -44,6 +46,7 @@ export default function Page() {
     setContent(todo.content)
     setPriority(todo.priority)
     setLimitedDate(dateFormat(todo.limitedDate))
+    setPublicOn(todo.publicOn)
   }, [todo])
   if (error) return <div>Error fetching todo: {error.message}</div>
 
@@ -66,7 +69,8 @@ export default function Page() {
       title,
       content,
       priority,
-      limitedDate
+      limitedDate,
+      publicOn
     }
     try {
       await updateTodo(check)
@@ -120,6 +124,12 @@ export default function Page() {
             onChange={(date) => {
               if (date) setLimitedDate(date)
             }}
+          />
+          <hr />
+          <Checkbox
+            label='公開しますか？'
+            checked={publicOn}
+            onChange={(event) => setPublicOn(event.currentTarget.checked)}
           />
           <hr />
           <Group gap='sm'>

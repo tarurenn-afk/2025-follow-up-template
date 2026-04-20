@@ -61,7 +61,8 @@ export const todoController: FastifyPluginAsync = async (
         title: request.body.title,
         content: request.body.content,
         priority: request.body.priority,
-        limitedDate: request.body.limitedDate
+        limitedDate: request.body.limitedDate,
+        publicOn: request.body.publicOn
       }
       const userNo = request.session.get('userNo')
       request.session.set('userNo', userNo)
